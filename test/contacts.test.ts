@@ -11,10 +11,9 @@ chai.should()
 const baseUrl = 'http://localhost:3000'
 
 describe('Contacts controller requests', () => {
-    let method = ''
 
     describe('Set contact function', () => {
-        method = '/set-contact'
+        let method = '/set-contact'
 
         it("should insert a contact and answer 200", (done) => {
             let contact: Contact = {
@@ -49,23 +48,19 @@ describe('Contacts controller requests', () => {
         });
     });
 
-    /*describe('Get all contacts function', () => {
-        method = '/get-contacts'
+    describe('Get all contacts function', () => {
+        let method = '/get-contacts'
 
         it("should get all contacts", (done) => {
-            let contact: Contact = {
-                email: "someTestContact@gmail.com", name: "TestContact", phone: "123"
-            }
 
             chai.request(baseUrl)
-                .post(method)
-                .send(contact)
+                .get(method)
                 .end((err, res) => {
                     expect(res).to.have.status(200)
-                    expect(res.body).to.not.equals('')
+                    expect(res.body.data).to.be.a('array')
                     done()
                 })
         });
-    });*/
+    });
 });
 
