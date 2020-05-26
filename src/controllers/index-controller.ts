@@ -1,8 +1,7 @@
-import {BaseRequest} from "../models/vendors/base-request";
-import {BaseResponse} from "../models/vendors/base-response";
+import {Request, Response} from "express"
 
 export class IndexController {
-    public handleIndex(req: BaseRequest, res: BaseResponse) {
+    public handleIndex(req: Request, res: Response) {
         console.log('index requested___')
         res.send('You can use ' +
             '\'GET/getAllContacts\'' +

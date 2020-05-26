@@ -9,7 +9,10 @@ var ContactsController = /** @class */ (function () {
     }
     ContactsController.prototype.handleGetAll = function (request, response) {
         dao.getAllContacts().then(function (contacts) {
-            response.json(contacts);
+            response.status(200).json({
+                contacts: contacts,
+                code: ""
+            });
             console.log('get contacts ' + contacts);
         })["catch"](function (error) {
             response.send('DB QUERY error: ' + error);
@@ -23,7 +26,7 @@ var ContactsController = /** @class */ (function () {
             phone: request.body.email
         };
         if (contact.name == '') {
-            response.json('please enter the contact name');
+            response.status(200).json('please enter contact name');
             return;
         }
         dao.insertContact(contact).then(function (res) {

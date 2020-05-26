@@ -1,9 +1,7 @@
-import {BaseRequest} from "../models/vendors/base-request";
-import {BaseResponse} from "../models/vendors/base-response";
 import {ContactsDao} from '../db/contacts-dao';
 import {DatabaseProvider} from "../db/database-provider";
 import {Contact} from "../models/contact";
-import {request} from "express";
+import {Request, Response} from "express";
 
 const dao = new ContactsDao(new DatabaseProvider().provideDatabase())
 
@@ -12,9 +10,12 @@ export class ContactsController {
     constructor() {
     }
 
-    public handleGetAll(request: BaseRequest, response: BaseResponse) {
+    public handleGetAll(request: Request, response: Response) {
         dao.getAllContacts().then(contacts => {
-            response.json(contacts)
+            response.status(200).json({
+                contacts,
+                code: ""
+            })
             console.log('get contacts ' + contacts)
         }).catch(error => {
             response.send('DB QUERY error: ' + error)
@@ -22,14 +23,14 @@ export class ContactsController {
         })
     }
 
-    public handleSetContact(request: BaseRequest, response: BaseResponse) {
+    public handleSetContact(request: Request, response: Response) {
         let contact: Contact = {
             name: request.body.name,
             email: request.body.phone,
             phone: request.body.email
         }
         if (contact.name == '') {
-            response.json('please enter the contact name')
+            response.status(200).json('please enter contact name')
             return
         }
         dao.insertContact(contact).then(res => {
@@ -41,7 +42,7 @@ export class ContactsController {
         })
     }
 
-    public handleDelContact(request: BaseRequest, response: BaseResponse) {
+    public handleDelContact(request: Request, response: Response) {
         let name: string = request.query['name'] as string
 
         dao.delContact(name).then(res => {
@@ -53,7 +54,7 @@ export class ContactsController {
         })
     }
 
-    public handleUpdateContact(request: BaseRequest, response: BaseResponse) {
+    public handleUpdateContact(request: Request, response: Response) {
         let contact: Contact = {
             name: request.body.name,
             email: request.body.phone,
