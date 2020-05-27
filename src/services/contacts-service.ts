@@ -23,12 +23,11 @@ export class ContactsService {
     setContact(contact : Contact){
         return new Promise((res, rej) => {
             if (contact.name == '') {
-                rej('failed to add contact. name is empty')
+                res('failed to add contact. name is empty')
                 return
             }
-
             repo.insertContact(contact).then(queryRes => {
-                res()
+                res(`inserted ${contact.name}`)
                 console.log('inserted ' + res)
             }).catch(error => {
                 rej(error)

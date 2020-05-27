@@ -35,13 +35,13 @@ describe('Contacts controller requests', () => {
             let contact: Contact = {
                 email: "", name: "", phone: ""
             }
+
             chai.request(baseUrl)
                 .post(method)
                 .send(contact)
                 .end((err, res) => {
                     //should type
-                    res.should.not.have.status(200)
-                    res.status.should.not.equal(Status.OK)
+                    res.body.status.should.equal(Status.OK)
                     res.body.data.should.equal('failed to add contact. name is empty')
                     done()
                 })
@@ -75,7 +75,6 @@ describe('Contacts controller requests', () => {
                 .put(method)
                 .send(contact)
                 .end((err, res) => {
-                    console.log(res.body);
 
                     expect(res).to.have.status(200)
                     expect(res.body.data).to.equal(`updated ${contact.name}`)

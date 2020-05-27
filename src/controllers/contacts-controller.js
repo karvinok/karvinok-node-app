@@ -20,8 +20,8 @@ var ContactsController = /** @class */ (function () {
             email: request.body.phone,
             phone: request.body.email
         };
-        service.setContact(contact).then(function () {
-            response.status(200).json(new base_response_1.BaseResponse("inserted " + contact.name, base_response_1.Status.OK));
+        service.setContact(contact).then(function (res) {
+            response.status(200).json(new base_response_1.BaseResponse(res, base_response_1.Status.OK));
         })["catch"](function (error) {
             response.status(500).send();
         });

@@ -23,9 +23,9 @@ export class ContactsController {
             email: request.body.phone,
             phone: request.body.email
         }
-        service.setContact(contact).then(() => {
+        service.setContact(contact).then((res) => {
             response.status(200).json(new BaseResponse(
-                `inserted ${contact.name}`, Status.OK
+                res, Status.OK
             ))
         }).catch((error) => {
             response.status(500).send()
