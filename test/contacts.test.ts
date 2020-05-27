@@ -66,7 +66,7 @@ describe('Contacts controller requests', () => {
     describe('Update contact function', () => {
         let method = '/update-contact'
 
-        it('should update contact and have non-empty body', (done) => {
+        it('should not update contact if name is not found', (done) => {
             let contact: Contact = {
                 email: "Dimon@email.com", name: "Dimon", phone: "123123123"
             }
@@ -77,7 +77,7 @@ describe('Contacts controller requests', () => {
                 .end((err, res) => {
 
                     expect(res).to.have.status(200)
-                    expect(res.body.data).to.equal(`updated ${contact.name}`)
+                    expect(res.body.data).to.equal(`Could not update ${contact.name}, name not found`)
                     done()
                 })
         });
