@@ -7,55 +7,59 @@ const service = new ContactsService()
 
 export class ContactsController {
 
-    public handleGetAll(request: Request, response: Response) {
-        service.getAllContacts().then(contacts => {
-            response.status(200).json(new BaseResponse(
-                contacts, Status.OK
-            ))
-        }).catch((error) => {
-            response.status(500).send('DB QUERY error: ' + error)
-        })
-    }
-
-    public handleSetContact(request: Request, response: Response) {
-        let contact: Contact = {
-            name: request.body.name,
-            email: request.body.phone,
-            phone: request.body.email
-        }
-        service.setContact(contact).then((res) => {
-            response.status(200).json(new BaseResponse(
+    public async handleGetAll(request: Request, response: Response) {
+        try {
+            const res = await service.getAllContacts()
+            await response.status(200).json(new BaseResponse(
                 res, Status.OK
             ))
-        }).catch((error) => {
+        } catch (e) {
             response.status(500).send()
-        })
+        }
     }
 
-    public handleUpdateContact(request: Request, response: Response) {
+    public async handleSetContact(request: Request, response: Response) {
         let contact: Contact = {
             name: request.body.name,
             email: request.body.phone,
             phone: request.body.email
         }
-        service.updateContact(contact).then(() => {
-            response.status(200).json(new BaseResponse(
-                `updated ${contact.name}`, Status.OK
+        try {
+            const res = await service.setContact(contact)
+            await response.status(200).json(new BaseResponse(
+                res, Status.OK
             ))
-        }).catch(() => {
-            response.status(500).send()
-        })
+        } catch (e) {
+            response.status(500).send(e)
+        }
     }
 
-    public handleDelContact(request: Request, response: Response) {
+    public async handleUpdateContact(request: Request, response: Response) {
+        let contact: Contact = {
+            name: request.body.name,
+            email: request.body.phone,
+            phone: request.body.email
+        }
+        try {
+            const res = await service.updateContact(contact)
+            await response.status(200).json(new BaseResponse(
+                res, Status.OK
+            ))
+        } catch (e) {
+            response.status(500).send(e)
+        }
+    }
+
+    public async handleDelContact(request: Request, response: Response) {
         let name: string = request.query['name'] as string
 
-        service.deleteContact(name).then((resString) => {
-            response.status(200).json(new BaseResponse(
-                resString, Status.OK
+        try {
+            const res = await service.deleteContact(name)
+            await response.status(200).json(new BaseResponse(
+                res, Status.OK
             ))
-        }).catch(() => {
-            response.status(500).send()
-        })
+        } catch (e) {
+            response.status(500).send(e)
+        }
     }
 }

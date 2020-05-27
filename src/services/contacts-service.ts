@@ -1,70 +1,41 @@
 import {ContactsRepository} from "../db/contacts-repository";
 import {DatabaseProvider} from "../db/database-provider";
 import {Contact} from "../models/contact";
-import {BaseResponse, Status} from "../models/base-response";
 
 const repo = new ContactsRepository(new DatabaseProvider().provideDatabase())
 
 export class ContactsService {
 
-    getAllContacts(){
-        return new Promise((res, rej) => {
-            repo.getAllContacts().then(contacts => {
-                //логика
-                console.log('get contacts ' + contacts)
-                res(contacts)
-            }).catch(error => {
-                console.log('DB QUERY error: ' + error)
-                rej(error)
-            })
-        });
+    async getAllContacts() {
+        const contacts = await repo.getAllContacts()
+        return contacts
     }
 
-    setContact(contact : Contact){
-        return new Promise((res, rej) => {
-            if (contact.name == '') {
-                res('failed to add contact. name is empty')
-                return
-            }
-            repo.insertContact(contact).then(queryRes => {
-                res(`inserted ${contact.name}`)
-                console.log('inserted ' + res)
-            }).catch(error => {
-                rej(error)
-                console.log('DB QUERY error: ' + error)
-            })
-        });
+    async setContact(contact: Contact) {
+        if (contact.name == '') {
+            return 'failed to add contact. name is empty'
+        } else {
+            await repo.insertContact(contact)
+            return `inserted ${contact.name}`
+        }
     }
 
-    updateContact(contact : Contact){
-        return new Promise((res, rej) => {
-
-            repo.updateContact(contact).then(queryRes => {
-                res()
-                console.log('updated' + res)
-            }).catch(error => {
-                rej()
-                console.log('DB QUERY error: ' + error)
-            })
-        });
+    async updateContact(contact: Contact) {
+        const res = await repo.updateContact(contact)
+        if (res == 0) {
+            return `Could not update ${contact.name}, name not found`
+        } else {
+            return `updated ${res} contacts with name ${contact.name}`
+        }
     }
 
-    deleteContact(name : string){
-        return new Promise((res, rej) => {
-
-            repo.delContact(name).then(queryRes => {
-                if (queryRes == 0) {
-                    res(`Could not delete ${name}, not found`)
-                } else {
-                    res(`deleted ${name}`)
-                }
-                console.log(`deleted ${name}`)
-            }).catch(error => {
-                rej()
-                console.log(`DB query ERROR ` + error)
-            })
-        });
-
+    async deleteContact(name: string) {
+        const res = await repo.delContact(name)
+        if (res == 0) {
+            return `Could not delete ${name}, not found`
+        } else {
+            return `deleted ${res} contacts with name ${name}`
+        }
     }
 
 }
