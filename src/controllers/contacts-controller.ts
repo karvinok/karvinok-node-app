@@ -52,7 +52,7 @@ export class ContactsController {
 
         service.deleteContact(name).then((resString) => {
             response.status(200).json(new BaseResponse(
-                resString, Status.NO_SUCH_CONTACT
+                resString, Status.OK
             ))
         }).catch(() => {
             response.status(500).send()
