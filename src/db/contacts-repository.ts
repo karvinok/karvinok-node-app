@@ -1,7 +1,7 @@
 import Knex = require("knex");
 import {Contact} from "../models/contact";
 
-export class ContactsDao {
+export class ContactsRepository {
 
     constructor(public db: Knex) {}
 

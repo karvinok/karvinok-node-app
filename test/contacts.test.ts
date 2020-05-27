@@ -1,7 +1,7 @@
 import {ContactsController} from "../src/controllers/contacts-controller";
 import {Contact} from "../src/models/contact";
 import {expect, assert} from "chai";
-import * as chai from 'chai';
+import chai from 'chai';
 import chaiHttp = require('chai-http');
 import {Status} from "../src/models/base-response";
 
@@ -51,7 +51,7 @@ describe('Contacts controller requests', () => {
     describe('Get all contacts function', () => {
         let method = '/get-contacts'
 
-        it("should get all contacts", (done) => {
+        it("should return status 200 and array", (done) => {
 
             chai.request(baseUrl)
                 .get(method)
@@ -61,6 +61,44 @@ describe('Contacts controller requests', () => {
                     done()
                 })
         });
+    });
+
+    describe('Update contact function', () => {
+        let method = '/update-contact'
+
+        it('should update contact and have non-empty body', (done) => {
+            let contact: Contact = {
+                email: "Dimon@email.com", name: "Dimon", phone: "123123123"
+            }
+
+            chai.request(baseUrl)
+                .put(method)
+                .send(contact)
+                .end((err, res) => {
+                    console.log(res.body);
+
+                    expect(res).to.have.status(200)
+                    expect(res.body.data).to.equal(`updated ${contact.name}`)
+                    done()
+                })
+        });
+
+        /*it('should not update contact with empty or non-existing name', (done) => {
+            let contact: Contact = {
+                email: "Test@email.com", name: "Test", phone: "00000"
+            }
+
+            chai.request(baseUrl)
+                .put(method)
+                .send(contact)
+                .end((err, res) => {
+                    console.log(res.body);
+
+                    expect(res).to.have.status(200)
+                    expect(res.body.data).to.equal(`updated ${contact.name}`)
+                    done()
+                })
+        });*/
     });
 });
 
