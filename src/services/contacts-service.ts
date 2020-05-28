@@ -1,12 +1,14 @@
-import {ContactsRepository} from "../db/contacts-repository";
 import {Contact} from "../models/contact";
 import { injectable, inject } from "inversify";
+import {IContactsRepository} from "../interfaces/contacts-repo";
+import {TYPES} from "../di/types";
+import {IContactsService} from "../interfaces/contacts-service";
 
 @injectable()
-export class ContactsService {
+export class ContactsService implements IContactsService{
 
     public constructor(
-        @inject(ContactsRepository.name) public repo: ContactsRepository,
+        @inject(TYPES.ContactsRepository) public repo: IContactsRepository,
     ){}
 
     async getAllContacts() {

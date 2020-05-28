@@ -12,7 +12,7 @@ const baseUrl = 'http://localhost:3000'
 describe('Contacts controller requests', () => {
 
     describe('Set contact function', () => {
-        let method = '/set-contact'
+        let method = '/contacts/set-contact'
 
         it("should insert a contact and answer 200", (done) => {
             let contact: Contact = {
@@ -48,7 +48,7 @@ describe('Contacts controller requests', () => {
     });
 
     describe('Get all contacts function', () => {
-        let method = '/get-contacts'
+        let method = '/contacts/get-all'
 
         it("should return status 200 and array", (done) => {
 
@@ -63,7 +63,7 @@ describe('Contacts controller requests', () => {
     });
 
     describe('Update contact function', () => {
-        let method = '/update-contact'
+        let method = '/contacts/update-contact'
 
         it('should not update contact if name is not found', (done) => {
             let contact: Contact = {

@@ -1,7 +1,9 @@
 import knex = require("knex");
+import {IDatabaseProvider} from "../interfaces/database-provider";
+import { injectable } from "inversify";
 
-export class DatabaseProvider {
-
+@injectable()
+export class DatabaseProvider implements IDatabaseProvider{
     provideDatabase() {
         return knex({
             client: 'pg',

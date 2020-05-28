@@ -1,17 +1,19 @@
 import Knex = require("knex");
 import {Contact} from "../models/contact";
-import { injectable, inject } from "inversify";
-import {DatabaseProvider} from "./database-provider";
+import {injectable, inject} from "inversify";
+import {IContactsRepository} from "../interfaces/contacts-repo";
+import {IDatabaseProvider} from "../interfaces/database-provider";
+import {TYPES} from "../di/types";
 
 @injectable()
-export class ContactsRepository {
+export class ContactsRepository implements IContactsRepository {
 
     private db: Knex;
     private tableName: string = 'contacts'
 
     public constructor(
-        @inject(DatabaseProvider.name) public dbProvider: DatabaseProvider,
-    ){
+        @inject(TYPES.DatabaseProvider) public dbProvider: IDatabaseProvider,
+    ) {
         this.db = dbProvider.provideDatabase()
     }
 
@@ -26,7 +28,7 @@ export class ContactsRepository {
             .where('name', contact.name)
     }
 
-    getAllContacts() {
+    getAllContacts(): any {
         return this.db.table(this.tableName)
             .select('*')
     }

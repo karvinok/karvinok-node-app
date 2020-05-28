@@ -1,21 +1,22 @@
 import {Contact} from "../models/contact";
 import {Request, Response} from "express";
 import {BaseResponse, Status} from "../models/base-response";
-import {ContactsService} from "../services/contacts-service";
 import {
     controller, httpGet, httpPost, httpPut, httpDelete, BaseHttpController
 } from "inversify-express-utils";
 import {inject} from "inversify";
+import {TYPES} from "../di/types";
+import {IContactsService} from "../interfaces/contacts-service";
 
 @controller('/contacts')
 export class ContactsController extends BaseHttpController {
 
-    public constructor(@inject(ContactsService.name) public service: ContactsService,
+    public constructor(@inject(TYPES.ContactsService) public service: IContactsService,
     ) {
         super()
     }
 
-    @httpGet('/getAll')
+    @httpGet('/get-all')
     public async getAll(request: Request, response: Response) {
         try {
             const res = await this.service.getAllContacts()
@@ -27,7 +28,7 @@ export class ContactsController extends BaseHttpController {
         }
     }
 
-    @httpPost('/setContact')
+    @httpPost('/set-contact')
     public async setContact(request: Request, response: Response) {
         let contact: Contact = {
             name: request.body.name,
@@ -44,7 +45,7 @@ export class ContactsController extends BaseHttpController {
         }
     }
 
-    @httpPut('/updateContact')
+    @httpPut('/update-contact')
     public async updateContact(request: Request, response: Response) {
         let contact: Contact = {
             name: request.body.name,
@@ -61,7 +62,7 @@ export class ContactsController extends BaseHttpController {
         }
     }
 
-    @httpDelete('/deleteContact')
+    @httpDelete('/del-contact')
     public async delContact(request: Request, response: Response) {
         let name: string = request.query['name'] as string
 
