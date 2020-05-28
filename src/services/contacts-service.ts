@@ -1,13 +1,17 @@
 import {ContactsRepository} from "../db/contacts-repository";
-import {DatabaseProvider} from "../db/database-provider";
 import {Contact} from "../models/contact";
+import { injectable, inject } from "inversify";
 
-const repo = new ContactsRepository(new DatabaseProvider().provideDatabase())
-
+@injectable()
 export class ContactsService {
 
+    public constructor(
+        @inject(ContactsRepository.name) public repo: ContactsRepository,
+    ){}
+
     async getAllContacts() {
-        const contacts = await repo.getAllContacts()
+        const contacts = await this.repo.getAllContacts()
+        //use contacts build logic
         return contacts
     }
 
@@ -15,13 +19,13 @@ export class ContactsService {
         if (contact.name == '') {
             return 'failed to add contact. name is empty'
         } else {
-            await repo.insertContact(contact)
+            await this.repo.insertContact(contact)
             return `inserted ${contact.name}`
         }
     }
 
     async updateContact(contact: Contact) {
-        const res = await repo.updateContact(contact)
+        const res = await this.repo.updateContact(contact)
         if (res == 0) {
             return `Could not update ${contact.name}, name not found`
         } else {
@@ -30,7 +34,7 @@ export class ContactsService {
     }
 
     async deleteContact(name: string) {
-        const res = await repo.delContact(name)
+        const res = await this.repo.delContact(name)
         if (res == 0) {
             return `Could not delete ${name}, not found`
         } else {

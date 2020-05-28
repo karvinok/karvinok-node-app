@@ -1,6 +1,7 @@
 import knex = require("knex");
 
 export class DatabaseProvider {
+
     provideDatabase() {
         return knex({
             client: 'pg',

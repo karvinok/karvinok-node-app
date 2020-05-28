@@ -1,6 +1,14 @@
 import {Request, Response} from "express"
+import {controller, httpGet, BaseHttpController} from "inversify-express-utils";
 
-export class IndexController {
+@controller('/')
+export class IndexController extends BaseHttpController {
+
+    constructor() {
+        super();
+    }
+
+    @httpGet('/')
     public handleIndex(req: Request, res: Response) {
         console.log('index requested___')
         res.send('You can use ' +

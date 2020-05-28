@@ -1,4 +1,3 @@
-import {ContactsController} from "../src/controllers/contacts-controller";
 import {Contact} from "../src/models/contact";
 import {expect, assert} from "chai";
 import chai from 'chai';

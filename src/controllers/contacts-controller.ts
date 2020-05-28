@@ -2,14 +2,23 @@ import {Contact} from "../models/contact";
 import {Request, Response} from "express";
 import {BaseResponse, Status} from "../models/base-response";
 import {ContactsService} from "../services/contacts-service";
+import {
+    controller, httpGet, httpPost, httpPut, httpDelete, BaseHttpController
+} from "inversify-express-utils";
+import {inject} from "inversify";
 
-const service = new ContactsService()
+@controller('/contacts')
+export class ContactsController extends BaseHttpController {
 
-export class ContactsController {
+    public constructor(@inject(ContactsService.name) public service: ContactsService,
+    ) {
+        super()
+    }
 
-    public async handleGetAll(request: Request, response: Response) {
+    @httpGet('/getAll')
+    public async getAll(request: Request, response: Response) {
         try {
-            const res = await service.getAllContacts()
+            const res = await this.service.getAllContacts()
             await response.status(200).json(new BaseResponse(
                 res, Status.OK
             ))
@@ -18,14 +27,15 @@ export class ContactsController {
         }
     }
 
-    public async handleSetContact(request: Request, response: Response) {
+    @httpPost('/setContact')
+    public async setContact(request: Request, response: Response) {
         let contact: Contact = {
             name: request.body.name,
             email: request.body.phone,
             phone: request.body.email
         }
         try {
-            const res = await service.setContact(contact)
+            const res = await this.service.setContact(contact)
             await response.status(200).json(new BaseResponse(
                 res, Status.OK
             ))
@@ -34,14 +44,15 @@ export class ContactsController {
         }
     }
 
-    public async handleUpdateContact(request: Request, response: Response) {
+    @httpPut('/updateContact')
+    public async updateContact(request: Request, response: Response) {
         let contact: Contact = {
             name: request.body.name,
             email: request.body.phone,
             phone: request.body.email
         }
         try {
-            const res = await service.updateContact(contact)
+            const res = await this.service.updateContact(contact)
             await response.status(200).json(new BaseResponse(
                 res, Status.OK
             ))
@@ -50,11 +61,12 @@ export class ContactsController {
         }
     }
 
-    public async handleDelContact(request: Request, response: Response) {
+    @httpDelete('/deleteContact')
+    public async delContact(request: Request, response: Response) {
         let name: string = request.query['name'] as string
 
         try {
-            const res = await service.deleteContact(name)
+            const res = await this.service.deleteContact(name)
             await response.status(200).json(new BaseResponse(
                 res, Status.OK
             ))

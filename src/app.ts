@@ -1,13 +1,22 @@
-import express = require('express')
-import {indexRouter} from "./routes"
-import {contactsRouter} from "./routes/contacts"
+import {InversityConfig} from "./di/inversity.config";
+import {ContactsService} from "./services/contacts-service";
+import {DatabaseProvider} from "./db/database-provider";
+import * as bodyParser from 'body-parser';
 
-export const app = express()
-const port = process.env.PORT || 3000
+const port = 3000
+const inversityConfig = new InversityConfig()
 
-app.use(indexRouter)
-app.use(contactsRouter)
+inversityConfig.registerProviders({
+    ContactsService,
+    DatabaseProvider
+})
+
+const app = inversityConfig.provideExpressServer().setConfig((app) => {
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.json());
+}).build()
+
 app.listen(port, () => {
-    console.log('server listening ' + port)
+    console.log('server is listening ' + port)
 })
 
