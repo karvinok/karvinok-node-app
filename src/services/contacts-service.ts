@@ -43,5 +43,4 @@ export class ContactsService implements IContactsService{
             return `deleted ${res} contacts with name ${name}`
         }
     }
-
 }
