@@ -16,7 +16,7 @@ describe('Contacts controller requests', () => {
 
         it("should insert a contact and answer 200", (done) => {
             let contact: Contact = {
-                email: "someTestContact@gmail.com", name: "TestContact", phone: "123"
+                email: "someTestContactik@gmail.com", name: "TestContact", phone: "123"
             }
             chai.request(baseUrl)
                 .post(method)
