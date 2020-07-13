@@ -35,6 +35,7 @@ export class ContactsService implements IContactsService{
         }
     }
 
+
     async deleteContact(name: string) {
         const res = await this.repo.delContact(name)
         if (res == 0) {
