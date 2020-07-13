@@ -28,7 +28,6 @@ describe('Contacts controller requests', () => {
 
                     done()
                 })
-
         });
 
         it("should not insert a contact without name", (done) => {
